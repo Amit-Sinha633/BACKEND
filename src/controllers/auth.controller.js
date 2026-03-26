@@ -63,7 +63,7 @@ const logInUser = async (req, res) => {
     }
     const correctPassword = await existingUser.isPasswordCorrect(password);
     if (!correctPassword) {
-      return res.status(401).json({
+      return res.status(400).json({
         msg: "User with email and password does not exist",
       });
     }
