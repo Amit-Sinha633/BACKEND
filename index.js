@@ -12,7 +12,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser())
 app.use(cors({
     origin: "https://desunlearnanderan.netlify.app/",
-    credentials: true
+    credentials: true,
+     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"]
 }))
 
 app.get('/', (req,res)=>{
