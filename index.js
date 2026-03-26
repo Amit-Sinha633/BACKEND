@@ -14,6 +14,10 @@ app.use(cookieParser())
 //     origin: "https://desunlearnanderan.netlify.app/",
 //     credentials: true
 // }))
+
+app.get('/', (req,res)=>{
+  res.send("ohh Lovely")
+});
 app.use("/app/v1/Learn", router);
 const Port = process.env.PORT || 8000;
 
