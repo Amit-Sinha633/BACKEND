@@ -14,7 +14,7 @@ app.use(cookieParser());
 
 app.use(cors({
     origin: [
-      "https://desunlearnanderan.netlify.app"
+      "https://desunlearnanderan.netlify.app/"
     ],
 
     credentials: true,
