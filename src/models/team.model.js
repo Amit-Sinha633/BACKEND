@@ -12,30 +12,6 @@
 //         type: Schema.Types.ObjectId,
 //         ref: "Contest"
 //     }],
-//     isSubmitted:{
-//         type:Boolean,
-//         default:false
-//     },
-//     quality:{
-//         type:Number,
-//         min:1,
-//         max:5
-//     },
-//     creativity:{
-//       type:Number,
-//         min:1,
-//         max:5
-//     },
-//     completion:{
-//         type:Number,
-//         min:1,
-//         max:5
-//     },
-//     reusability:{
-//         type:Number,
-//         min:1,
-//         max:5
-//     },
 //     githubLink:{
 //         type:String
 //     },
