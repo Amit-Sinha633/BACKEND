@@ -1,4 +1,4 @@
-import mongoose, { Schema } from "mongoose"
+import mongoose, { model, Schema } from "mongoose"
 
 const contestSchema = new Schema({
         title:{
@@ -18,6 +18,7 @@ const contestSchema = new Schema({
             type:String,
             required:true
         },
+        
         deadline:{
             type:Date,
             required:true
@@ -27,14 +28,18 @@ const contestSchema = new Schema({
             enum:["Upcoming","Ongoing","Completed"],
             default:"Upcoming"
         },
-        // team:[{
-        //     type:Schema.Types.ObjectId,
-        //     ref:"Team"
-        // }],
-        rewards:[{
+        team:[{
+            type:Schema.Types.ObjectId,
+            ref:"Team"
+        }],
+        rewards:{
             type: Number,
             required: true
-        }]
+        },
+        startingDate:{
+             type:Date,
+            required:true
+        },
     },{
         timestamps:true
     }

@@ -3,6 +3,7 @@ import connection from "./src/db/user.db.js";
 import cors from "cors"
 import cookieParser from "cookie-parser";
 import router from "./src/routes/user.route.js";
+import contestRouter from "./src/routes/admin.route.js";
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -26,7 +27,7 @@ app.get('/', (req,res)=>{
 
 
 app.use("/app/v1/Learn", router);
-
+app.use("/app/v1/Admin", contestRouter)
 const Port = process.env.PORT || 8000;
 
 connection();

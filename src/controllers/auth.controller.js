@@ -132,4 +132,8 @@ const getProfile = async(req,res) =>{
     })
   }
 }
+
+const TeamMaking = async(req,res) =>{
+
+}
 export { registerUser, logInUser, logOutUser ,getProfile};
