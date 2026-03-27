@@ -21,7 +21,7 @@ app.use(cors({
 }));
 
 app.get('/', (req,res)=>{
-  res.send("ohh Lovely")
+  res.send("Hello everyone!!")
 });
 
 
