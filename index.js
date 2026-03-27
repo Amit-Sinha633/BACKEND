@@ -13,7 +13,7 @@ app.use(cookieParser());
 
 
 app.use(cors({
-    origin: "https://frontend-desun-learn-and-eran.onrender.com/",
+    origin: "https://frontend-desun-learn-and-eran.onrender.com",
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE"]
 }));
