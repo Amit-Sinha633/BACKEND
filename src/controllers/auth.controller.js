@@ -97,7 +97,7 @@ const logOutUser = async (req, res) => {
       {
         $unset: { refreshToken: 1 },
       },
-      { new: true },
+      { returnDocument: "after" },
     );
     const options = {
       httpOnly: true,
@@ -117,4 +117,17 @@ const logOutUser = async (req, res) => {
     });
   }
 };
-export { registerUser, logInUser, logOutUser };
+const getProfile = async(req,res) =>{
+  try {
+    const user = await req.user
+    return  res.status(200).json({
+      message: user
+    })
+    
+  } catch (error) {
+    return res.status(500).json({
+      message: "Internal surver error"
+    })
+  }
+}
+export { registerUser, logInUser, logOutUser ,getProfile};
