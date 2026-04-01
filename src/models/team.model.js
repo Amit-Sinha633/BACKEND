@@ -2,12 +2,18 @@ import mongoose, { model, Schema }  from "mongoose";
 const teamSchema = new Schema({
     name:{
         type:String,
-        required:true
+        required:true,
+        unique:true
     },
     members:[{
         type:Schema.Types.ObjectId,
         ref: "User"
-    }]
+    }],
+    createdBy: {
+  type: Schema.Types.ObjectId,
+  ref: "User",
+  required: true
+}
 },
 {
     timestamps:true

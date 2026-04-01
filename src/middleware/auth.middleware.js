@@ -13,7 +13,6 @@ const verifyJwt = async(req,res,next) => {
         const decodedToken = jwt.verify(token,process.env.ACCESS_TOKEN_SECRET)
         const user = await User.findById(decodedToken.userId)
         req.user = user
-        console.log(req.user)
         next()
     } catch (error) {
         return res.status(500).json({
@@ -24,8 +23,6 @@ const verifyJwt = async(req,res,next) => {
 
 const checkRole = (req, res, next) => {
     try {
-        console.log("req.user:", req.user) 
-
         if (!req.user) {
             return res.status(401).json({
                 msg: "User not exist"

@@ -1,4 +1,5 @@
 import mongoose, { model, Schema } from "mongoose";
+import crypto from "crypto"
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
@@ -34,10 +35,10 @@ const userSchema = new Schema(
     refreshToken: {
       type: String,
     },
-    temporaryToken: {
+    forgetToken: {
       type: String,
     },
-    temporaryTokenExpiary: {
+    forgetTokenExpiary: {
       type: Date,
     },
     isVerifiedEmail: {
@@ -70,5 +71,13 @@ userSchema.methods.generateRefreshToken = (userId) => {
     expiresIn: process.env.REFRESH_TOKEN_EXPIARY,
   });
 };
+
+userSchema.methods.generateTemporaryToken = function(){
+  const unhashedToken = crypto.randomBytes(20).toString("hex")
+  const hashedToken = crypto.createHash("sha256").update(unhashedToken).digest("hex")
+  const tokenExpiary = Date.now() + 20*60*1000
+  return {unhashedToken,hashedToken,tokenExpiary}
+}
+
 const User = model("User", userSchema);
 export { User };
