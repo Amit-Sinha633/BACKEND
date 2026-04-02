@@ -96,27 +96,34 @@ const logInUser = async (req, res) => {
 
 const logOutUser = async (req, res) => {
   try {
-    const user = await User.findByIdAndUpdate(
+    if (!req.user || !req.user._id) {
+      return res.status(401).json({ msg: "Unauthorized" });
+    }
+
+    await User.findByIdAndUpdate(
       req.user._id,
       {
-        $set:{refreshToken: undefined}
+        $unset: { refreshToken: 1 }, // better than setting undefined
       },
-      { returnDocument: "after" },
+      { new: true }
     );
+
     const options = {
       httpOnly: true,
-      secure: true,
-      sameSite: "None",
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
     };
+
     return res
-      .clearCookie("accessToken", undefined, options)
-      .clearCookie("refreshToken", undefined, options)
+      .clearCookie("accessToken", options)
+      .clearCookie("refreshToken", options)
       .status(200)
       .json({
-        msg: "User loggedOut successfully",
-        user: req.body.userName,
+        msg: "User logged out successfully",
       });
+
   } catch (error) {
+    console.error(error); // 🔥 IMPORTANT for debugging
     return res.status(500).json({
       msg: "Something went wrong while logout",
     });
