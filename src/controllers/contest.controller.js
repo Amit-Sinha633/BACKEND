@@ -6,13 +6,15 @@ const createContest = async (req, res) => {
       title,
       description,
       brief,
-      image,
       deadline,
       type,
       rewards,
       startingDate,
     } = req.body;
-console.log(req.body)
+
+    const image = req.file?.path;
+
+    // Validation
     if (
       !title ||
       !description ||
@@ -20,20 +22,39 @@ console.log(req.body)
       !deadline ||
       !type ||
       !rewards ||
-      !startingDate
+      !startingDate 
     ) {
       return res.status(400).json({
         msg: "All fields are required",
       });
     }
-    const existingContest = await Contest.findOne({ title });
 
-    if (existingContest) {
+    // Date validation
+    if (new Date(startingDate) > new Date(deadline)) {
       return res.status(400).json({
-        msg: "Contest already created",
+        msg: "Starting date cannot be after deadline",
       });
     }
-    const parsedRewards = JSON.parse(rewards)
+
+    // Duplicate check
+    const existingContest = await Contest.findOne({ title });
+    if (existingContest) {
+      return res.status(400).json({
+        msg: "Contest already exists",
+      });
+    }
+
+    // Safe JSON parse
+    let parsedRewards;
+    try {
+      parsedRewards = JSON.parse(rewards);
+    } catch {
+      return res.status(400).json({
+        msg: "Invalid rewards format",
+      });
+    }
+
+    // Create contest
     const newContest = await Contest.create({
       title,
       description,
@@ -41,18 +62,18 @@ console.log(req.body)
       image,
       deadline,
       type,
-      rewards:parsedRewards,
+      rewards: parsedRewards,
       startingDate,
     });
-console.log(newContest)
+
     return res.status(201).json({
       msg: "Contest created successfully",
       data: newContest,
     });
+
   } catch (error) {
-    console.log(error)
     return res.status(500).json({
-      msg: "Something went wrong while creating the contest",
+      msg: error.message,
     });
   }
 };
