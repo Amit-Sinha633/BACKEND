@@ -17,7 +17,7 @@ const contestSchema = new Schema(
     },
     image: {
       type: String,
-      required: true,
+   
     },
     deadline: {
       type: Date,
