@@ -17,7 +17,6 @@ console.log(req.body)
       !title ||
       !description ||
       !brief ||
-      !image ||
       !deadline ||
       !type ||
       !rewards ||
