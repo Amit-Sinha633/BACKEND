@@ -12,39 +12,7 @@ const createContest = async (req, res) => {
       startingDate,
     } = req.body;
 
-    const image = req.file?.path;
-
-    // Validation
-    if (
-      !title ||
-      !description ||
-      !brief ||
-      !deadline ||
-      !type ||
-      !rewards ||
-      !startingDate 
-    ) {
-      return res.status(400).json({
-        msg: "All fields are required",
-      });
-    }
-
-    // Date validation
-    if (new Date(startingDate) > new Date(deadline)) {
-      return res.status(400).json({
-        msg: "Starting date cannot be after deadline",
-      });
-    }
-
-    // Duplicate check
-    const existingContest = await Contest.findOne({ title });
-    if (existingContest) {
-      return res.status(400).json({
-        msg: "Contest already exists",
-      });
-    }
-
-    // Safe JSON parse
+    // 🔥 parse rewards FIRST
     let parsedRewards;
     try {
       parsedRewards = JSON.parse(rewards);
@@ -54,12 +22,42 @@ const createContest = async (req, res) => {
       });
     }
 
-    // Create contest
+    // ✅ validation AFTER parsing
+    if (
+      !title ||
+      !description ||
+      !brief ||
+      !deadline ||
+      !type ||
+      !startingDate ||
+      !parsedRewards?.position ||
+      !parsedRewards?.amount
+    ) {
+      return res.status(400).json({
+        msg: "All fields are required",
+      });
+    }
+
+    // ✅ date validation
+    if (new Date(startingDate) > new Date(deadline)) {
+      return res.status(400).json({
+        msg: "Starting date cannot be after deadline",
+      });
+    }
+
+    // ✅ duplicate check
+    const existingContest = await Contest.findOne({ title });
+    if (existingContest) {
+      return res.status(400).json({
+        msg: "Contest already exists",
+      });
+    }
+
+    // ✅ create WITHOUT image
     const newContest = await Contest.create({
       title,
       description,
       brief,
-      image,
       deadline,
       type,
       rewards: parsedRewards,
@@ -78,4 +76,4 @@ const createContest = async (req, res) => {
   }
 };
 
-export { createContest };
+export {createContest}
