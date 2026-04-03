@@ -86,7 +86,9 @@ const logInUser = async (req, res) => {
       .json({
         msg: "User loggedIn successfully",
         user: existingUser,
-        role:existingUser.role
+        role:existingUser.role,
+        accessToken,        // 🔥 ADD THIS
+    refreshToken
       });
   } catch (error) {
     return res.status(400).json({

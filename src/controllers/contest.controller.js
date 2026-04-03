@@ -8,9 +8,7 @@ const createContest = async (req, res) => {
       brief,
       image,
       deadline,
-      type,
-      rewards,
-      startingDate,
+      type
     } = req.body;
 console.log(req.body)
     if (
@@ -18,9 +16,7 @@ console.log(req.body)
       !description ||
       !brief ||
       !deadline ||
-      !type ||
-      !rewards ||
-      !startingDate
+      !type 
     ) {
       return res.status(400).json({
         msg: "All fields are required",
@@ -39,9 +35,7 @@ console.log(req.body)
       brief,
       image,
       deadline,
-      type,
-      rewards,
-      startingDate,
+      type
     });
 console.log(newContest)
     return res.status(201).json({
