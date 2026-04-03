@@ -18,7 +18,8 @@ const submitSchema = new Schema(
         },
         liveLink:{
             type: String,
-            unique: true
+            unique: true,
+            required:true
         },
         
     },

@@ -1,3 +1,4 @@
+import { Contest } from "../models/contest.model.js";
 import { User } from "../models/user.model.js";
 import nodemailer from "nodemailer";
 
@@ -103,7 +104,7 @@ const logOutUser = async (req, res) => {
     await User.findByIdAndUpdate(
       req.user._id,
       {
-        $unset: { refreshToken: 1 }, // better than setting undefined
+        $unset: { refreshToken: 1 }, 
       },
       { new: true }
     );
@@ -231,4 +232,11 @@ const resetPassword = async (req, res, next) => {
     .json(new ApiResponse(200, user, "Password has been reset successfully"));
 };
 
-export { registerUser, logInUser, logOutUser, getProfile, forgetPassword,resetPassword};
+const getAllContest = async(req,res) => {
+  const contests = await Contest.find()
+  return res.status(200).json({
+    msg: "these are your contests",
+    data: contests
+  })
+}
+export { registerUser, logInUser, logOutUser, getProfile, forgetPassword,resetPassword,getAllContest};

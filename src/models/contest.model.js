@@ -35,7 +35,7 @@ const contestSchema = new Schema(
       }
     ],
     startingDate: {
-      type: Date,
+      type: Date, 
       required: true,
     },
   },

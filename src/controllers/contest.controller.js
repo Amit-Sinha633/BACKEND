@@ -12,6 +12,7 @@ const createContest = async (req, res) => {
       rewards,
       startingDate,
     } = req.body;
+console.log(req.body)
     if (
       !title ||
       !description ||
@@ -43,12 +44,13 @@ const createContest = async (req, res) => {
       rewards,
       startingDate,
     });
-
+console.log(newContest)
     return res.status(201).json({
       msg: "Contest created successfully",
       data: newContest,
     });
   } catch (error) {
+    console.log(error)
     return res.status(500).json({
       msg: "Something went wrong while creating the contest",
     });
