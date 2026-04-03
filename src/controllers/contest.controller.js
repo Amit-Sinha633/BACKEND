@@ -33,6 +33,7 @@ console.log(req.body)
         msg: "Contest already created",
       });
     }
+    const parsedRewards = JSON.parse(rewards)
     const newContest = await Contest.create({
       title,
       description,
@@ -40,7 +41,7 @@ console.log(req.body)
       image,
       deadline,
       type,
-      rewards,
+      rewards:parsedRewards,
       startingDate,
     });
 console.log(newContest)
