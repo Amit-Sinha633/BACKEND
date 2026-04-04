@@ -15,5 +15,11 @@ router.route("/get-profile").post(verifyJwt,getProfile);
 router.route("/forget-password").post(forgetPassword)
 router.route("/team-making").post(verifyJwt,teamMaking)
 router.route("/perticipating").post(teamParticipatingInContest)
-router.route("/get-all-contest").post(verifyJwt,getAllContest)
+router.route("/get-all-contest").get(verifyJwt,getAllContest)
+
+
+
+
+
+
 export default router;
