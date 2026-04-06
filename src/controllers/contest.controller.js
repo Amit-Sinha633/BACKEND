@@ -12,6 +12,7 @@ const createContest = async (req, res) => {
       prizes
     } = req.body;
 const image = req.file?.path || ""
+    if (
       !title ||
       !description ||
       !brief ||
