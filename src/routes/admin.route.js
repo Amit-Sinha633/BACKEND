@@ -7,13 +7,11 @@ import { deleteUser, getAllContest, getAllUsers, updateUser } from "../controlle
 const contestRouter = Router()
 
 contestRouter.route("/create-contest").post(
-    verifyJwt,
-    checkRole,
-    upload.single(        
-            "image"
-        ),
-    createContest
-)
+  verifyJwt,
+  checkRole,
+  upload.single("image"),
+  createContest
+);
 contestRouter.route("/get-all-contest").post(verifyJwt,getAllContest)
 contestRouter.route("/get-all-users").post(verifyJwt,getAllUsers)
 contestRouter.route("/delete-user/:id").delete(verifyJwt,deleteUser)
