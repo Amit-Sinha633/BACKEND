@@ -11,7 +11,7 @@ const createContest = async (req, res) => {
       startingDate,
       prizes
     } = req.body;
-const image = req.file?.path
+const image = req.file?.path || req.file?.secure_url;
     if (
       !title ||
       !description ||

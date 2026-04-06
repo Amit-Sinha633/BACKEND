@@ -10,7 +10,7 @@ const verifyJwt = async (req, res, next) => {
 
 
     if (!token) {
-      return res.status(400).json({
+      return res.status(401).json({
         msg: "no token found",
       });
     }
