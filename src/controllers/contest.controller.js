@@ -57,7 +57,7 @@ import { Contest } from "../models/contest.model.js";
 //     });
 //   }
 // };
-import { Contest } from "../models/contest.model.js"; // Ensure this path is correct!
+
 
 const createContest = async (req, res) => {
   try {
