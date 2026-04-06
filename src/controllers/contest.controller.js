@@ -12,22 +12,22 @@ const createContest = async (req, res) => {
       prizes
     } = req.body;
 const image = req.file?.path || ""
-    // if (
-    //   !title ||
-    //   !description ||
-    //   !brief ||
-    //   !deadline ||
-    //   !type ||
-    //   !startingDate ||
-    //   !prizes ||
-    //   !image
-    // ) {
-    //   return res.status(400).json({
-    //     msg: "All fields are required",
+    if (
+      !title ||
+      !description ||
+      !brief ||
+      !deadline ||
+      !type ||
+      !startingDate ||
+      !prizes ||
+      !image
+    ) {
+      return res.status(400).json({
+        msg: "All fields are required",
        
-    //   });
+      });
       
-    // }
+    }
     const existingContest = await Contest.findOne({ title });
 
     if (existingContest) {
