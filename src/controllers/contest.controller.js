@@ -66,7 +66,7 @@ const createContest = async (req, res) => {
     // Check if file exists safely
     const image = req.file?.path; 
 
-    if (!title || !description || !brief || !deadline || !startingDate || !prizes || !image) {
+    if (!title || !description || !brief || !deadline || !startingDate || !prizes) {
       return res.status(400).json({ msg: "All fields are required" });
     }
 

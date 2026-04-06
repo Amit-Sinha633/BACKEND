@@ -7,8 +7,8 @@ import { deleteUser, getAllContest, getAllUsers, updateUser } from "../controlle
 const contestRouter = Router()
 
 contestRouter.route("/create-contest").post(
-  // verifyJwt,
-  // checkRole,
+  verifyJwt,
+  checkRole,
   upload.single("image"),
   createContest
 );
