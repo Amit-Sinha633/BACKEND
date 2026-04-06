@@ -12,7 +12,7 @@ contestRouter.route("/create-contest").post(
   upload.single("image"),
   createContest
 );
-contestRouter.route("/get-all-contest").post(verifyJwt,getAllContest)
+contestRouter.route("/get-all-contest").get(verifyJwt,getAllContest)
 contestRouter.route("/get-all-users").post(verifyJwt,getAllUsers)
 contestRouter.route("/delete-user/:id").delete(verifyJwt,deleteUser)
 contestRouter.route("/update-user/:id").patch(verifyJwt,updateUser)
