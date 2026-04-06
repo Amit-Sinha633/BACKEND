@@ -241,4 +241,62 @@ const getAllContest = async(req,res) => {
     data: contests
   })
 }
-export { registerUser, logInUser, logOutUser, getProfile, forgetPassword,resetPassword,getAllContest};
+
+const getAllUsers = async(req,res) =>{
+ try {
+  const users = await User.find()
+  return res.status(200).json({
+    msg: users
+  })
+ } catch (error) {
+  return res.status(500).json({
+    msg: "Something went wrong from server"
+  })
+ }
+}
+
+const deleteUser = async(req,res) =>{
+  try {
+    const {id} = req.params
+    const user = await User.findByIdAndDelete(id)
+    if(!user){
+      return res.status(400).json({
+        msg: "No user found"
+      })
+    }
+    return res.status(200).json({
+      msg: "User deleted Successfully",
+      data: user
+    })
+    
+  } catch (error) {
+    return res.status(500).json({
+    msg: "Something went wrong from server"
+  })
+  }
+}
+
+const updateUser = async(req,res) =>{
+  try {
+    const {id} = req.params
+    const newUser = await User.findByIdAndUpdate(
+      id,
+      req.body,
+      {returnDocument:"after"}
+    )
+    if(!newUser){
+      return res.status(400).json({
+        msg: "No user found"
+      })
+    }
+    return res.status(200).json({
+      msg: "User updated successfully",
+      data: newUser
+    })
+  } catch (error) {
+    return res.status(500).json({
+      msg: "Something went wrong from surver"
+    })
+  }
+} 
+export { registerUser, logInUser, logOutUser, getProfile, forgetPassword,resetPassword,getAllContest,getAllUsers,deleteUser,updateUser};

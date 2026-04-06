@@ -27,7 +27,15 @@ const contestSchema = new Schema(
       enum: ["Upcoming", "Ongoing", "Completed"],
       default: "Upcoming",
     },
-  },
+    startingDate:{
+      type: Date,
+      required: true,
+    },
+    prizes:{
+      type:String,
+      required:true
+    }
+  },  
   {
     timestamps: true,
   },
