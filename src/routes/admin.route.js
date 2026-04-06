@@ -13,7 +13,7 @@ contestRouter.route("/create-contest").post(
   createContest
 );
 contestRouter.route("/get-all-contest").get(verifyJwt,getAllContest)
-contestRouter.route("/get-all-users").post(verifyJwt,getAllUsers)
+contestRouter.route("/get-all-users").get(verifyJwt,getAllUsers)
 contestRouter.route("/delete-user/:id").delete(verifyJwt,deleteUser)
 contestRouter.route("/update-user/:id").patch(verifyJwt,updateUser)
 contestRouter.route("/update-contest/:id").patch(verifyJwt,updateContest)
