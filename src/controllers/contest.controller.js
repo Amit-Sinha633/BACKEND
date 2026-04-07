@@ -52,29 +52,6 @@ const deleteContest = async(req,res) =>{
   }
 }
 
-// const updateContest = async(req,res) =>{
-//   try {
-//     const {id} = req.params
-//     const newContest = await Contest.findByIdAndUpdate(
-//       id,
-//       req.body,
-//       {returnDocument: "after"}
-//     )
-//     if(!newContest){
-//       return res.status(400).json({
-//         msg: "No contest found"
-//       })
-//     }
-//     return res.status(200).json({
-//       msg: "Contest updated successfully",
-//       data: newContest
-//     })
-//   } catch (error) {
-//     return res.status(500).json({
-//       msg: "Somethig went wrong from surver"
-//     })
-//   }
-// }
 
 const updateContest = async (req, res) => {
   try {

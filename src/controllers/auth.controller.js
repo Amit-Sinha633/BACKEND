@@ -279,9 +279,14 @@ const deleteUser = async(req,res) =>{
 const updateUser = async(req,res) =>{
   try {
     const {id} = req.params
+    const updatedThings ={
+      userName : req.body,
+      phoneNumber: req.body,
+      role: req.body
+    }
     const newUser = await User.findByIdAndUpdate(
       id,
-      req.body,
+      updatedThings,
       {returnDocument:"after"}
     )
     if(!newUser){
