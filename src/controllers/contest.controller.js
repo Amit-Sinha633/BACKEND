@@ -111,7 +111,7 @@ const updateContest = async (req, res) => {
     const updatedContest = await Contest.findByIdAndUpdate(
       id,
       updateData,
-      { new: true } // 🔥 IMPORTANT
+      { returnDocument:"after" } // 🔥 IMPORTANT
     );
 
     if (!updatedContest) {
