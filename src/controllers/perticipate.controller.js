@@ -3,7 +3,9 @@ import { Contest } from "../models/contest.model.js"
 import { Participate } from "../models/perticipate.model.js"
 const teamParticipatingInContest = async(req,res) =>{
     try {
-        const {teamName,contestName} = req.body
+        const {teamName} = req.body
+        const {id} = req.params
+        const contestName = await Contest.findById(id)
         if(!teamName || !contestName){
             return res.status(400).json({
                 msg: "All field are required"

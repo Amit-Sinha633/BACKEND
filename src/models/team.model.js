@@ -6,10 +6,10 @@ const teamSchema = new Schema({
         unique:true
     },
     members:[{
-        type:Schema.Types.ObjectId,
-        ref: "User"
-    }],
-    createdBy: {
+        type:"String"
+    }
+    ],
+    createdTeamBy: {
   type: Schema.Types.ObjectId,
   ref: "User",
   required: true

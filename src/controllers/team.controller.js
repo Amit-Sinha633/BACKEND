@@ -1,17 +1,22 @@
 
 import { User } from "../models/user.model.js"
 import { Team } from "../models/team.model.js"
-import { Contest } from "../models/contest.model.js";
 
 
 const teamMaking = async (req, res) => {
   try {
     const createdTeamBy = req.user;
-    const { name, member } = req.body;
+    let { name, members } = req.body;
 
-    if (!name || !member) {
+    if (!name || !members) {
       return res.status(400).json({
         msg: "All fields are required",
+      });
+    }
+
+    if (!Array.isArray(members)) {
+      return res.status(400).json({
+        msg: "Members should be an array",
       });
     }
 
@@ -22,26 +27,32 @@ const teamMaking = async (req, res) => {
       });
     }
 
-    const existingPartner = await User.findOne({ email: member });
+    const existingPartner = await User.find({
+      email: { $in: members }
+    });
 
-    if (!existingPartner) {
+    if (!existingPartner || existingPartner.length === 0) {
       return res.status(400).json({
         msg: "Partner email does not exist",
       });
     }
 
-    if (
-      createdTeamBy._id.toString() === existingPartner._id.toString()
-    ) {
+    const partnerIds = existingPartner.map(user => user._id);
+
+    // ❌ prevent self adding
+    const isSelfIncluded = partnerIds.some(
+      id => id.toString() === createdTeamBy._id.toString()
+    );
+
+    if (isSelfIncluded) {
       return res.status(400).json({
         msg: "You cannot add yourself as teammate",
       });
     }
 
-    const members = [createdTeamBy._id, existingPartner._id];
-
+    // ❌ check if any member already in team
     const existingTeam = await Team.findOne({
-      members: { $in: members },
+      members: { $in: members }
     });
 
     if (existingTeam) {
@@ -53,17 +64,18 @@ const teamMaking = async (req, res) => {
     const newTeam = await Team.create({
       name,
       members,
-      createdBy: createdTeamBy._id,
+      createdTeamBy: createdTeamBy._id,
     });
 
     return res.status(201).json({
       msg: "Team created successfully",
       data: newTeam,
     });
+
   } catch (error) {
+    console.error(error);
     return res.status(500).json({
       msg: "Something went wrong while creating a team",
-      error,
     });
   }
 };
