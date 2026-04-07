@@ -52,27 +52,83 @@ const deleteContest = async(req,res) =>{
   }
 }
 
-const updateContest = async(req,res) =>{
+// const updateContest = async(req,res) =>{
+//   try {
+//     const {id} = req.params
+//     const newContest = await Contest.findByIdAndUpdate(
+//       id,
+//       req.body,
+//       {returnDocument: "after"}
+//     )
+//     if(!newContest){
+//       return res.status(400).json({
+//         msg: "No contest found"
+//       })
+//     }
+//     return res.status(200).json({
+//       msg: "Contest updated successfully",
+//       data: newContest
+//     })
+//   } catch (error) {
+//     return res.status(500).json({
+//       msg: "Somethig went wrong from surver"
+//     })
+//   }
+// }
+
+const updateContest = async (req, res) => {
   try {
-    const {id} = req.params
-    const newContest = await Contest.findByIdAndUpdate(
-      id,
-      req.body,
-      {returnDocument: "after"}
-    )
-    if(!newContest){
-      return res.status(400).json({
-        msg: "No contest found"
-      })
+    const { id } = req.params;
+
+    console.log("BODY:", req.body); // 🔍 debug
+    console.log("FILE:", req.file); // 🔍 debug
+
+    const {
+      title,
+      description,
+      brief,
+      startingDate,
+      deadline,
+      type,
+      prizes,
+    } = req.body;
+
+    const updateData = {
+      title,
+      description,
+      brief,
+      startingDate,
+      deadline,
+      type,
+      prizes,
+    };
+
+    // ✅ handle image if uploaded
+    if (req.file) {
+      updateData.image = req.file.path;
     }
+
+    const updatedContest = await Contest.findByIdAndUpdate(
+      id,
+      updateData,
+      { new: true } // 🔥 IMPORTANT
+    );
+
+    if (!updatedContest) {
+      return res.status(404).json({
+        msg: "No contest found",
+      });
+    }
+
     return res.status(200).json({
       msg: "Contest updated successfully",
-      data: newContest
-    })
+      data: updatedContest,
+    });
   } catch (error) {
     return res.status(500).json({
-      msg: "Somethig went wrong from surver"
-    })
+      msg: "Something went wrong from server",
+      error: error.message,
+    });
   }
-}
+};
 export { createContest,deleteContest,updateContest};
