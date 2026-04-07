@@ -1,19 +1,26 @@
 import mongoose, { Schema } from "mongoose";
 
 const participateSchema = new Schema(
-    {
-        teamName:{
-            type:String,
-            required:true
-        },
-        contestName:{
-            type:String,
-            required:true
-        }
+  {
+    user: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
     },
-    {
-        timestamps:true
-    }
-)
 
-export const Participate = mongoose.model("Participate",participateSchema)
+    team: {
+      type: Schema.Types.ObjectId,
+      ref: "Team",
+    },
+
+    contest: {
+      type: Schema.Types.ObjectId,
+      ref: "Contest",
+      required: true,
+    },
+  },
+  {
+    timestamps: true,
+  }
+);
+
+export const Participate = mongoose.model("Participate", participateSchema);

@@ -17,7 +17,7 @@ const contestSchema = new Schema(
     },
     image: {
       type: String,
-      required:true
+      required: true,
     },
     deadline: {
       type: Date,
@@ -28,15 +28,20 @@ const contestSchema = new Schema(
       enum: ["Upcoming", "Ongoing", "Completed"],
       default: "Upcoming",
     },
-    startingDate:{
+    startingDate: {
       type: Date,
       required: true,
     },
-    prizes:{
-      type:String,
-      required:true
-    }
-  },  
+    prizes: {
+      type: String,
+      required: true,
+    },
+    participationType: {
+      type: String,
+      enum: ["solo", "team"],
+      required: true,
+    },
+  },
   {
     timestamps: true,
   },

@@ -5,7 +5,7 @@ import { Team } from "../models/team.model.js"
 
 const teamMaking = async (req, res) => {
   try {
-    const createdTeamBy = req.user;
+    const createdTeamBy = req.user._id;
     let { name, members } = req.body;
 
     if (!name || !members) {

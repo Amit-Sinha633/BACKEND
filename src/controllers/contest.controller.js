@@ -2,12 +2,12 @@ import { Contest } from "../models/contest.model.js";
 
 const createContest = async (req, res) => {
   try {
-    const { title, description, brief, deadline, type, startingDate, prizes } = req.body;
+    const { title, description, brief, deadline, type, startingDate, prizes,participationType } = req.body;
     
     // Check if file exists safely
     const image = req.file?.path; 
 
-    if (!title || !description || !brief || !deadline || !startingDate || !prizes || !image) {
+    if (!title || !description || !brief || !deadline || !startingDate || !prizes || !image || !participationType) {
       return res.status(400).json({ msg: "All fields are required" });
     }
 
@@ -24,7 +24,8 @@ const createContest = async (req, res) => {
       deadline,
       type: type || "Upcoming",
       startingDate,
-      prizes
+      prizes,
+      participationType
     });
 
     return res.status(201).json({ msg: "Contest created successfully", data: newContest });
@@ -65,6 +66,7 @@ const updateContest = async (req, res) => {
       deadline: new Date(req.body.deadline),
       type: req.body.type,
       prizes: Number(req.body.prizes),
+      participationType: req.body.participationType
     };
 
     if (req.file) {

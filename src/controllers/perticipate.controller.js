@@ -1,46 +1,55 @@
 import { Team } from "../models/team.model.js"
 import { Contest } from "../models/contest.model.js"
 import { Participate } from "../models/perticipate.model.js"
-const teamParticipatingInContest = async(req,res) =>{
-    try {
-        const {teamName} = req.body
-        const {id} = req.params
-        const contestName = await Contest.findById(id)
-        if(!teamName || !contestName){
-            return res.status(400).json({
-                msg: "All field are required"
-            })
-        }
-        const existingName = await Team.findOne({name:teamName})
-        const existingContest = await Contest.findOne({title:contestName})
-      
-        if(!existingName || !existingContest){
-            return res.status(400).json({
-                msg: "Team or contest is not exist"
-            })
-        }
-        if(!(existingContest.type == "Ongoing")){
-            return res.status(400).json({
-                msg: "You are not authorized to perticipate this contest"
-            })
-        }
-        const alreadyParticipate = await Participate.findOne({teamName,contestName})
-        if(alreadyParticipate){
-            return res.status(400).json({
-                msg: "You have already perticipated in the contest"
-            })
-        }
-        const newPerticipate = await Participate.create({teamName,contestName}) 
-        return res.status(200).json({
-            msg: `Now your team ${teamName} is successfully perticipating ${contestName} contest`,
-            data: newPerticipate
-        })
-    } catch (error) {
-        return res.status(500).json({
-            msg: "Something went wrong while perticipating in any contest",
-            msg: error
-        })
+const teamParticipatingInContest = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const { contestId } = req.params;
+    
+    console.log(contestId)
+    const contest = await Contest.findById(contestId);
+console.log(userId)
+    if (!contest) {
+      return res.status(404).json({ msg: "Contest not found" });
     }
-}
+
+    // 🔥 SOLO ONLY
+    if (contest.participationType === "solo") {
+      const alreadyJoined = await Participate.findOne({
+        user: userId,
+        contest: contestId,
+      });
+
+      if (alreadyJoined) {
+        return res.status(400).json({
+          msg: "Already participated",
+        });
+      }
+
+      const entry = await Participate.create({
+        user: userId,
+        contest: contestId,
+      });
+
+      return res.status(201).json({
+        msg: "Joined as individual",
+        data: entry,
+      });
+    }
+
+    // 🔥 TEAM → BLOCK
+    if (contest.participationType === "team") {
+      return res.status(400).json({
+        msg: "This contest requires a team. Redirecting to team creation.",
+      });
+    }
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      msg: "Something went wrong",
+    });
+  }
+};
 
 export {teamParticipatingInContest}
