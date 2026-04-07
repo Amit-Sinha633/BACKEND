@@ -80,30 +80,16 @@ const updateContest = async (req, res) => {
   try {
     const { id } = req.params;
 
-    console.log("BODY:", req.body); // 🔍 debug
-    console.log("FILE:", req.file); // 🔍 debug
-
-    const {
-      title,
-      description,
-      brief,
-      startingDate,
-      deadline,
-      type,
-      prizes,
-    } = req.body;
-
     const updateData = {
-      title,
-      description,
-      brief,
-      startingDate,
-      deadline,
-      type,
-      prizes,
+      title: req.body.title,
+      description: req.body.description,
+      brief: req.body.brief,
+      startingDate: new Date(req.body.startingDate),
+      deadline: new Date(req.body.deadline),
+      type: req.body.type,
+      prizes: Number(req.body.prizes),
     };
 
-    // ✅ handle image if uploaded
     if (req.file) {
       updateData.image = req.file.path;
     }
@@ -111,20 +97,21 @@ const updateContest = async (req, res) => {
     const updatedContest = await Contest.findByIdAndUpdate(
       id,
       updateData,
-      { returnDocument:"after" } // 🔥 IMPORTANT
+      { new: true }
     );
 
     if (!updatedContest) {
-      return res.status(404).json({
-        msg: "No contest found",
-      });
+      return res.status(404).json({ msg: "Contest not found" });
     }
 
     return res.status(200).json({
       msg: "Contest updated successfully",
       data: updatedContest,
     });
+
   } catch (error) {
+    console.error("UPDATE ERROR:", error); // 🔥 MUST LOG
+
     return res.status(500).json({
       msg: "Something went wrong from server",
       error: error.message,
