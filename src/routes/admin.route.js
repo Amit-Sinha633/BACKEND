@@ -17,7 +17,11 @@ contestRouter.route("/get-all-contest").get(verifyJwt,getAllContest)
 contestRouter.route("/get-all-users").get(verifyJwt,getAllUsers)
 contestRouter.route("/delete-user/:id").delete(verifyJwt,deleteUser)
 contestRouter.route("/update-user/:id").patch(verifyJwt,updateUser)
-contestRouter.route("/update-contest/:id").patch(verifyJwt,updateContest)
+contestRouter.route("/update-contest/:id").patch(
+  verifyJwt,
+  upload.single("image"), // ✅ VERY IMPORTANT
+  updateContest
+);
 contestRouter.route("/delete-contest/:id").delete(verifyJwt,deleteContest)
 contestRouter.route("/winner-contest/:id").post(verifyJwt,checkRole,winnerController)
 export default contestRouter
