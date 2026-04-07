@@ -4,6 +4,7 @@ import { createContest, deleteContest, updateContest } from "../controllers/cont
 import { verifyJwt } from "../middleware/auth.middleware.js";
 import upload from "../middleware/multer.middleware.js";
 import { deleteUser, getAllContest, getAllUsers, updateUser } from "../controllers/auth.controller.js";
+import {winnerController} from "../controllers/winner.controller.js"
 const contestRouter = Router()
 
 contestRouter.route("/create-contest").post(
@@ -18,4 +19,5 @@ contestRouter.route("/delete-user/:id").delete(verifyJwt,deleteUser)
 contestRouter.route("/update-user/:id").patch(verifyJwt,updateUser)
 contestRouter.route("/update-contest/:id").patch(verifyJwt,updateContest)
 contestRouter.route("/delete-contest/:id").delete(verifyJwt,deleteContest)
+contestRouter.route("/winner-contest/:id").post(verifyJwt,checkRole,winnerController)
 export default contestRouter
