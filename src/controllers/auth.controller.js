@@ -280,9 +280,9 @@ const updateUser = async(req,res) =>{
   try {
     const {id} = req.params
     const updatedThings ={
-      userName : req.body,
-      phoneNumber: req.body,
-      role: req.body
+      userName : req.body.userName,
+      phoneNumber: req.body.phoneNumber,
+      role: req.body.role
     }
     const newUser = await User.findByIdAndUpdate(
       id,
