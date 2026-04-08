@@ -37,36 +37,12 @@ console.log(userId)
       });
     }
 
-if (contest.participationType === "team") {
-  const { teamId } = req.body; // Expect teamId from frontend
-
-  if (!teamId) {
-    return res.status(400).json({
-      msg: "This contest requires a team. Redirecting to team creation.",
-      redirect: true, // Hint for frontend
-    });
-  }
-
-  // Check if team already joined
-  const alreadyJoined = await Participate.findOne({
-    team: teamId,
-    contest: contestId,
-  });
-
-  if (alreadyJoined) {
-    return res.status(400).json({ msg: "Team already participated" });
-  }
-
-  const entry = await Participate.create({
-    team: teamId, // Ensure your Participate model has a 'team' field
-    contest: contestId,
-  });
-
-  return res.status(201).json({
-    msg: "Team joined successfully",
-    data: entry,
-  });
-}
+    // 🔥 TEAM → BLOCK
+    if (contest.participationType === "team") {
+      return res.status(400).json({
+        msg: "This contest requires a team. Redirecting to team creation.",
+      });
+    }
 
   } catch (error) {
     console.error(error);
@@ -76,4 +52,54 @@ if (contest.participationType === "team") {
   }
 };
 
-export {teamParticipatingInContest}
+const teamParticipatingInContestAsTeam = async(req,res) =>{
+   try {
+    const name = req.body;
+    const { contestId } = req.params;
+    
+    console.log(contestId)
+    const contest = await Contest.findById(contestId);
+console.log(name)
+    if (!contest) {
+      return res.status(404).json({ msg: "Contest not found" });
+    }
+
+    // 🔥 SOLO ONLY
+    if (contest.participationType === "team") {
+      const alreadyJoined = await Participate.findOne({
+        team: name._id,
+        contest: contestId,
+      });
+
+      if (alreadyJoined) {
+        return res.status(400).json({
+          msg: "Already participated",
+        });
+      }
+
+      const entry = await Participate.create({
+        team: name._id,
+        contest: contestId,
+      });
+
+      return res.status(201).json({
+        msg: "Joined as individual",
+        data: entry,
+      });
+    }
+
+    // 🔥 Solo → BLOCK
+    if (contest.participationType === "solo") {
+      return res.status(400).json({
+        msg: "This contest requires a team.",
+      });
+    }
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      msg: "Something went wrong",
+    });
+  }
+}
+export {teamParticipatingInContest,teamParticipatingInContestAsTeam}
