@@ -4,9 +4,8 @@ const submitSchema = new Schema(
     {
         teamName:{
             type: Schema.Types.ObjectId,
-            ref:"Team",
-            required:true
-        },
+            ref:"Team"
+        }, 
         contest:{
              type: Schema.Types.ObjectId,
             ref:"Contest",
