@@ -95,7 +95,15 @@ const submitProject = async (req, res) => {
     if (!contest) {
       return res.status(404).json({ msg: "Contest not found" });
     }
-
+    const isParticipating = await Participate.findOne({
+  team: team._id,
+  contest: contestId,
+});
+if (!isParticipating) {
+  return res.status(400).json({
+    msg: "Team is not participating in this contest",
+  });
+}
     // ✅ CHECK USER IN TEAM
     if (!team.members.includes(req.user.email)) {
       return res.status(403).json({
