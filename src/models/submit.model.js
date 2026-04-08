@@ -5,20 +5,18 @@ const submitSchema = new Schema(
         teamName:{
             type: Schema.Types.ObjectId,
             ref:"Team",
-            requird:true
+            required:true
         },
         contest:{
              type: Schema.Types.ObjectId,
             ref:"Contest",
-            requird:true
+            required:true
         },
         githubLink:{
             type: String,
-            unique: true
         },
         liveLink:{
             type: String,
-            unique: true,
             required:true
         },
         
