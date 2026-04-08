@@ -20,6 +20,14 @@ const teamMaking = async (req, res) => {
       });
     }
 
+    members = members.filter(email => email.trim() !== "");
+
+    if (members.length === 0) {
+      return res.status(400).json({
+        msg: "Add valid member emails",
+      });
+    }
+
     const teamName = await Team.findOne({ name });
     if (teamName) {
       return res.status(400).json({
@@ -31,15 +39,15 @@ const teamMaking = async (req, res) => {
       email: { $in: members }
     });
 
-    if (!existingPartner || existingPartner.length === 0) {
+    // ✅ FIXED
+    if (existingPartner.length !== members.length) {
       return res.status(400).json({
-        msg: "Partner email does not exist",
+        msg: "Some emails are not registered users",
       });
     }
 
     const partnerIds = existingPartner.map(user => user._id);
 
-    // ❌ prevent self adding
     const isSelfIncluded = partnerIds.some(
       id => id.toString() === createdTeamBy.toString()
     );
@@ -50,10 +58,9 @@ const teamMaking = async (req, res) => {
       });
     }
 
-    // ❌ check if any member already in team
-   const existingTeam = await Team.findOne({
-  members: { $in: partnerIds }
-});
+    const existingTeam = await Team.findOne({
+      members: { $in: partnerIds }
+    });
 
     if (existingTeam) {
       return res.status(400).json({
@@ -62,10 +69,10 @@ const teamMaking = async (req, res) => {
     }
 
     const newTeam = await Team.create({
-  name,
-  members: partnerIds,   // ✅ store IDs
-  createdTeamBy,
-});
+      name,
+      members: partnerIds,
+      createdTeamBy,
+    });
 
     return res.status(201).json({
       msg: "Team created successfully",
@@ -73,9 +80,11 @@ const teamMaking = async (req, res) => {
     });
 
   } catch (error) {
-    console.error(error);
+    console.error("TEAM ERROR:", error.message);
+
     return res.status(500).json({
       msg: "Something went wrong while creating a team",
+      error: error.message,
     });
   }
 };
