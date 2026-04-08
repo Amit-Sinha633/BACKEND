@@ -52,54 +52,59 @@ console.log(userId)
   }
 };
 
-const teamParticipatingInContestAsTeam = async(req,res) =>{
-   try {
-    const name = req.body;
+const teamParticipatingInContestAsTeam = async (req, res) => {
+  try {
+    const { teamId } = req.body;   // ✅ FIXED
     const { contestId } = req.params;
-    
-    console.log(contestId)
-    const contest = await Contest.findById(contestId);
-console.log(name)
-    if (!contest) {
-      return res.status(404).json({ msg: "Contest not found" });
-    }
 
-    // 🔥 SOLO ONLY
-    if (contest.participationType === "team") {
-      const alreadyJoined = await Participate.findOne({
-        team: name._id,
-        contest: contestId,
-      });
-
-      if (alreadyJoined) {
-        return res.status(400).json({
-          msg: "Already participated",
-        });
-      }
-
-      const entry = await Participate.create({
-        team: name._id,
-        contest: contestId,
-      });
-
-      return res.status(201).json({
-        msg: "Joined as individual",
-        data: entry,
-      });
-    }
-
-    // 🔥 Solo → BLOCK
-    if (contest.participationType === "solo") {
+    if (!teamId) {
       return res.status(400).json({
-        msg: "This contest requires a team.",
+        msg: "Team ID is required",
       });
     }
+
+    const contest = await Contest.findById(contestId);
+
+    if (!contest) {
+      return res.status(404).json({
+        msg: "Contest not found",
+      });
+    }
+
+    // ✅ Only allow TEAM contests
+    if (contest.participationType !== "team") {
+      return res.status(400).json({
+        msg: "This contest does not allow team participation",
+      });
+    }
+
+    // ✅ Check already participated
+    const alreadyJoined = await Participate.findOne({
+      team: teamId,
+      contest: contestId,
+    });
+
+    if (alreadyJoined) {
+      return res.status(400).json({
+        msg: "Already participated",
+      });
+    }
+
+    const entry = await Participate.create({
+      team: teamId,
+      contest: contestId,
+    });
+
+    return res.status(201).json({
+      msg: "Joined as team",
+      data: entry,
+    });
 
   } catch (error) {
     console.error(error);
-    res.status(500).json({
+    return res.status(500).json({
       msg: "Something went wrong",
     });
   }
-}
+};
 export {teamParticipatingInContest,teamParticipatingInContestAsTeam}

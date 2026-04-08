@@ -41,7 +41,7 @@ const teamMaking = async (req, res) => {
 
     // ❌ prevent self adding
     const isSelfIncluded = partnerIds.some(
-      id => id.toString() === createdTeamBy._id.toString()
+      id => id.toString() === createdTeamBy.toString()
     );
 
     if (isSelfIncluded) {
@@ -51,9 +51,9 @@ const teamMaking = async (req, res) => {
     }
 
     // ❌ check if any member already in team
-    const existingTeam = await Team.findOne({
-      members: { $in: members }
-    });
+   const existingTeam = await Team.findOne({
+  members: { $in: partnerIds }
+});
 
     if (existingTeam) {
       return res.status(400).json({
@@ -62,10 +62,10 @@ const teamMaking = async (req, res) => {
     }
 
     const newTeam = await Team.create({
-      name,
-      members,
-      createdTeamBy: createdTeamBy._id,
-    });
+  name,
+  members: partnerIds,   // ✅ store IDs
+  createdTeamBy,
+});
 
     return res.status(201).json({
       msg: "Team created successfully",

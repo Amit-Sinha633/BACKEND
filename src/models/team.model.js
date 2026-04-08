@@ -5,10 +5,12 @@ const teamSchema = new Schema({
         required:true,
         unique:true
     },
-    members:[{
-        type:"String"
-    }
-    ],
+    members: [
+  {
+    type: Schema.Types.ObjectId,
+    ref: "User"
+  }
+],
     createdTeamBy: {
   type: Schema.Types.ObjectId,
   ref: "User",
