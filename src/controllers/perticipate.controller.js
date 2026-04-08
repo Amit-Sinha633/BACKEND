@@ -37,12 +37,36 @@ console.log(userId)
       });
     }
 
-    // 🔥 TEAM → BLOCK
-    if (contest.participationType === "team") {
-      return res.status(400).json({
-        msg: "This contest requires a team. Redirecting to team creation.",
-      });
-    }
+if (contest.participationType === "team") {
+  const { teamId } = req.body; // Expect teamId from frontend
+
+  if (!teamId) {
+    return res.status(400).json({
+      msg: "This contest requires a team. Redirecting to team creation.",
+      redirect: true, // Hint for frontend
+    });
+  }
+
+  // Check if team already joined
+  const alreadyJoined = await Participate.findOne({
+    team: teamId,
+    contest: contestId,
+  });
+
+  if (alreadyJoined) {
+    return res.status(400).json({ msg: "Team already participated" });
+  }
+
+  const entry = await Participate.create({
+    team: teamId, // Ensure your Participate model has a 'team' field
+    contest: contestId,
+  });
+
+  return res.status(201).json({
+    msg: "Team joined successfully",
+    data: entry,
+  });
+}
 
   } catch (error) {
     console.error(error);
