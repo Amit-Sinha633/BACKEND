@@ -1,4 +1,5 @@
 import { Contest } from "../models/contest.model.js"
+import { Participate } from "../models/perticipate.model.js";
 import { Submit } from "../models/submit.model.js"
 import { Team } from "../models/team.model.js"
 
