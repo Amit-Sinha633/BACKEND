@@ -1,81 +1,7 @@
-import { Contest } from "../models/contest.model.js"
+import { Contest } from "../models/contest.model.js";
 import { Participate } from "../models/perticipate.model.js";
-import { Submit } from "../models/submit.model.js"
-import { Team } from "../models/team.model.js"
-
-
-// const submitProject = async (req, res) => {
-//   try {
-//     const { teamName, githubLink, liveLink } = req.body;
-//     const { contestId } = req.params;
-
-//     if (!teamName || !contestId || !liveLink) {
-//       return res.status(400).json({
-//         msg: "All fields are required",
-//       });
-//     }
-
-//     // ✅ Check team exists
-//     const team = await Team.findOne(teamName);
-//     if (!team) {
-//       return res.status(404).json({
-//         msg: "Team not found",
-//       });
-//     }
-
-//     // ✅ Check contest exists
-//     const contest = await Contest.findById(contestId);
-//     if (!contest) {
-//       return res.status(404).json({
-//         msg: "Contest not found",
-//       });
-//     }
-
-//     // ✅ Optional: Check contest is ongoing
-//     // if (contest.status !== "ongoing") {
-//     //   return res.status(400).json({
-//     //     msg: "Contest is not active",
-//     //   });
-//     // }
-//     // const existingUser = await Team.findOne(members.includes=req.user._id)
-//     if (!team.members.includes(req.user._id)) {
-//   return res.status(403).json({
-//     msg: "You are not part of this team",
-//   });
-// }
-//     // ✅ Prevent duplicate submission
-//     const alreadySubmitted = await Submit.findOne({
-//       teamName: teamName._id,
-//       contest: contestId,
-//     });
-
-//     if (alreadySubmitted) {
-//       return res.status(400).json({
-//         msg: "Project already submitted",
-//       });
-//     }
-
-//     // ✅ Create submission
-//     const newSubmit = await Submit.create({
-//       teamName: teamName._id,
-//       contest: contestId,
-//       githubLink,
-//       liveLink,
-//     });
-
-//     return res.status(201).json({
-//       msg: "Your project submitted successfully",
-//       data: newSubmit,
-//     });
-
-//   } catch (error) {
-//     console.error(error);
-//     return res.status(500).json({
-//       msg: "Something went wrong from server side",
-//     });
-//   }
-// };
-
+import { Submit } from "../models/submit.model.js";
+import { Team } from "../models/team.model.js";
 
 const submitProject = async (req, res) => {
   try {
@@ -101,6 +27,13 @@ const submitProject = async (req, res) => {
       return res.status(404).json({ msg: "Contest not found" });
     }
 
+    /* ================= USER IN TEAM (FIXED 🔥) ================= */
+    if (!team.members.includes(req.user._id)) {
+      return res.status(403).json({
+        msg: "You are not part of this team",
+      });
+    }
+
     /* ================= PARTICIPATION CHECK ================= */
     const isParticipating = await Participate.findOne({
       team: team._id,
@@ -113,13 +46,6 @@ const submitProject = async (req, res) => {
       });
     }
 
-    /* ================= USER IN TEAM ================= */
-    if (!team.members.includes(req.user.email)) {
-      return res.status(403).json({
-        msg: "You are not part of this team",
-      });
-    }
-
     /* ================= ALREADY SUBMITTED ================= */
     const alreadySubmitted = await Submit.findOne({
       teamName: team._id,
@@ -129,12 +55,12 @@ const submitProject = async (req, res) => {
     if (alreadySubmitted) {
       return res.status(200).json({
         msg: "Project already submitted",
-        isSubmitted: true, // 🔥 ADD THIS
+        isSubmitted: true,
         data: alreadySubmitted,
       });
     }
 
-    /* ================= CREATE SUBMISSION ================= */
+    /* ================= CREATE ================= */
     const newSubmit = await Submit.create({
       teamName: team._id,
       contest: contestId,
@@ -142,10 +68,9 @@ const submitProject = async (req, res) => {
       liveLink,
     });
 
-    /* ================= RESPONSE ================= */
     return res.status(201).json({
       msg: "Your project submitted successfully",
-      isSubmitted: true, // 🔥 ADD THIS
+      isSubmitted: true,
       data: newSubmit,
     });
 
@@ -157,6 +82,4 @@ const submitProject = async (req, res) => {
   }
 };
 
-
-
-export {submitProject}
+export { submitProject };
