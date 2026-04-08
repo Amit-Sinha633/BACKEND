@@ -13,7 +13,7 @@ router.route("/logInUser").post(logInUser);
 router.route("/logOutUser").post(verifyJwt,logOutUser)
 router.route("/get-profile").post(verifyJwt,getProfile);
 router.route("/forget-password").post(forgetPassword)
-router.route("/team-making").post(verifyJwt,teamMaking)
+router.route("/team-making").post(teamMaking)
 router.route("/perticipating/:contestId").post(verifyJwt,teamParticipatingInContest)
 router.route("/get-all-contest").get(getAllContest)
 
