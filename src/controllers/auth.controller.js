@@ -41,10 +41,12 @@ const registerUser = async (req, res) => {
     return res.status(200).json({
       msg: "User registered succesfully",
       data: newUser,
+      accessToken,     
+    refreshToken
     });
   } catch (error) {
     return res.status(500).json({
-      msg: "Somthoing went wrong while registaring the user",
+      msg: "Somthoing went wrong while registaring the user"
     });
   }
 };
