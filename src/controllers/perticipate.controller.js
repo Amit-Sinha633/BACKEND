@@ -2,6 +2,7 @@ import { Team } from "../models/team.model.js"
 import { Contest } from "../models/contest.model.js"
 import { Participate } from "../models/perticipate.model.js"
 import { perticipatedIn } from "./auth.controller.js";
+import { User } from "../models/user.model.js";
 const teamParticipatingInContest = async (req, res) => {
   try {
     const userId = req.user._id;
@@ -112,14 +113,16 @@ const teamParticipatingInContestAsTeam = async (req, res) => {
 const getAllParticipantsAsTeam = async (req, res) => {
   try {
     const { contestId } = req.params;
-console.log(contestId)
     const participants = await Participate.find({
       contest: contestId,
-    }).select("team user");
+    }).select("team user")
+     .populate("team", "name createdBy")   // team name
+  .populate("user", "userName email"); // user name + email
 console.log(participants)
     return res.status(200).json({
       msg: "Participants of this contest",
       data: participants,
+      
     });
 
   } catch (error) {

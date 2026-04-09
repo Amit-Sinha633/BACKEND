@@ -25,7 +25,7 @@ contestRouter.route("/update-contest/:id").patch(
   updateContest
 );
 contestRouter.route("/delete-contest/:id").delete(verifyJwt,deleteContest)
-contestRouter.route("/winner-contest/:id").post(verifyJwt,checkRole,winnerController)
 contestRouter.route("/contest/:contestId").get(verifyJwt,checkRole,getAllParticipantsAsTeam)
 
+// contestRouter.route("/winner-contest/:id").post(verifyJwt,checkRole,winnerController)
 export default contestRouter
