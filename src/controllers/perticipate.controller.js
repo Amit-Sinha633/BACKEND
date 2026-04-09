@@ -115,7 +115,7 @@ const getAllParticipantsAsTeam = async (req, res) => {
     const { contestId } = req.params;
     const participants = await Participate.find({
       contest: contestId,
-    }).select("team user -_id")
+    }).select("team user")
      .populate("team", "name createdBy")   // team name
   .populate("user", "userName email"); // user name + email
 console.log(participants)
