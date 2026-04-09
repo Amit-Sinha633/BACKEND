@@ -5,7 +5,7 @@ import { logOutUser } from "../controllers/auth.controller.js";
 import { verifyJwt } from "../middleware/auth.middleware.js";
 import { teamMaking } from "../controllers/team.controller.js";
 import { teamParticipatingInContest, teamParticipatingInContestAsTeam } from "../controllers/perticipate.controller.js";
-import { submitProject, submitProjectAsSolo } from "../controllers/submit.model.js";
+import { submitProject, submitProjectAsSolo } from "../controllers/submit.controller.js";
 
 const router = Router();
 

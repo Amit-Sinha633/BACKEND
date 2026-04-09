@@ -29,7 +29,7 @@ const submitProject = async (req, res) => {
     }
 
     /* ================= USER IN TEAM (FIXED 🔥) ================= */
-    if (!team.createdBy  === req.user._id) {
+    if (!(team.createdBy  === req.user._id)) {
       return res.status(403).json({
         msg: "You are not authorized to submit for this team",
       });

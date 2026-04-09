@@ -121,7 +121,7 @@ const getAllParticipantsAsTeam = async (req, res) => {
 console.log(participants)
     return res.status(200).json({
       msg: "Participants of this contest",
-      data: participants,
+      data: participants
       
     });
 
