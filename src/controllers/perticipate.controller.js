@@ -1,6 +1,7 @@
 import { Team } from "../models/team.model.js"
 import { Contest } from "../models/contest.model.js"
 import { Participate } from "../models/perticipate.model.js"
+import { perticipatedIn } from "./auth.controller.js";
 const teamParticipatingInContest = async (req, res) => {
   try {
     const userId = req.user._id;
@@ -107,4 +108,25 @@ const teamParticipatingInContestAsTeam = async (req, res) => {
     });
   }
 };
-export {teamParticipatingInContest,teamParticipatingInContestAsTeam}
+
+const getAllParticipantsAsTeam = async (req, res) => {
+  try {
+    const { contestId } = req.params;
+console.log(contestId)
+    const participants = await Participate.find({
+      contest: contestId,
+    }).select("team user");
+console.log(participants)
+    return res.status(200).json({
+      msg: "Participants of this contest",
+      data: participants,
+    });
+
+  } catch (error) {
+    return res.status(500).json({
+      msg: "Something went wrong",
+    });
+  }
+};
+ 
+export {teamParticipatingInContest,teamParticipatingInContestAsTeam,getAllParticipantsAsTeam}

@@ -1,7 +1,7 @@
 import { Contest } from "../models/contest.model.js";
 import { User } from "../models/user.model.js";
 import nodemailer from "nodemailer";
-
+import { Participate } from "../models/perticipate.model.js";
 const generateAccessAndRefreshToken = async (userId) => {
   try {
     const user = await User.findById(userId);
@@ -304,4 +304,8 @@ const updateUser = async(req,res) =>{
     })
   }
 } 
-export { registerUser, logInUser, logOutUser, getProfile, forgetPassword,resetPassword,getAllContest,getAllUsers,deleteUser,updateUser};
+
+const perticipatedIn = async(req,res) =>{
+ 
+}
+export { registerUser, logInUser, logOutUser, getProfile, forgetPassword,resetPassword,getAllContest,getAllUsers,deleteUser,updateUser,perticipatedIn};
