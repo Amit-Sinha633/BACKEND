@@ -18,6 +18,7 @@ const verifyJwt = async (req, res, next) => {
     const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
     const user = await User.findById(decodedToken.userId);
     req.user = user;
+    console.log(req.user)
     next();
   } catch (error) {
     return res.status(500).json({

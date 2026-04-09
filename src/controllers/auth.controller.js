@@ -20,7 +20,6 @@ const generateAccessAndRefreshToken = async (userId) => {
 const registerUser = async (req, res) => {
   try {
     const { userName, email, password, phoneNumber } = req.body;
-
     if (!userName || !email || !password || !phoneNumber) {
       return res.status(400).json({
         msg: "All fields are required",
@@ -38,15 +37,15 @@ const registerUser = async (req, res) => {
       password,
       phoneNumber,
     });
+    console.log(newUser)
     return res.status(200).json({
       msg: "User registered succesfully",
-      data: newUser,
-      accessToken,     
-    refreshToken
+      data: newUser
     });
   } catch (error) {
     return res.status(500).json({
-      msg: "Somthoing went wrong while registaring the user"
+      msg: "Somthoing went wrong while registaring the user",
+      error
     });
   }
 };

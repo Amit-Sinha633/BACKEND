@@ -91,7 +91,8 @@ const submitProjectAsSolo = async (req, res) => {
   try {
     const {  githubLink, liveLink } = req.body;
     const { contestId } = req.params;
-    const {userId} = req.user._id  
+    const userId = req.user._id
+    console.log(userId)  
       /* ================= VALIDATION ================= */
     if (!contestId || !liveLink) {
       return res.status(400).json({
