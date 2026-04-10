@@ -37,14 +37,14 @@ const registerUser = async (req, res) => {
       password,
       phoneNumber,
     });
-    console.log(newUser)
     return res.status(200).json({
       msg: "User registered succesfully",
-      data: newUser
+      data: newUser,
+      token
     });
   } catch (error) {
     return res.status(500).json({
-      msg: "Somthoing went wrong while registaring the user",
+      msg: "Something went wrong while registaring the user",
       error
     });
   }
