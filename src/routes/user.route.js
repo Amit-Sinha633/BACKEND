@@ -16,7 +16,7 @@ router.route("/get-profile").post(verifyJwt,getProfile);
 router.route("/forget-password").post(forgetPassword)
 router.route("/team-making").post(verifyJwt,teamMaking)
 router.route("/perticipating/:contestId").post(verifyJwt,teamParticipatingInContest)
-router.route("/perticipate-as-team/:contestId").post(verifyJwt,teamParticipatingInContestAsTeam)
+router.route("/perticipate-as-team/:contestId").post(teamParticipatingInContestAsTeam)
 router.route("/get-all-contest").get(getAllContest)
 router.route("/submit-project-as-team/:contestId").post(verifyJwt,submitProject)
 router.route("/submit-project-as-solo/:contestId").post(verifyJwt,submitProjectAsSolo)

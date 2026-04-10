@@ -2,6 +2,11 @@ import mongoose, { Schema } from "mongoose";
 
 const participateSchema = new Schema(
   {
+    user: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+    },
+
     team: {
       type: Schema.Types.ObjectId,
       ref: "Team",
@@ -12,10 +17,6 @@ const participateSchema = new Schema(
       ref: "Contest",
       required: true,
     },
-    isParticipate:{
-      type: Boolean,
-      default:false 
-    }
   },
   {
     timestamps: true,
