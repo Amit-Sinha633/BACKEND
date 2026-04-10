@@ -39,8 +39,7 @@ const registerUser = async (req, res) => {
     });
     return res.status(200).json({
       msg: "User registered succesfully",
-      data: newUser,
-      token
+      data: newUser
     });
   } catch (error) {
     return res.status(500).json({
