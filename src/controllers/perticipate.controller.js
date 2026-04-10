@@ -8,56 +8,67 @@ const teamParticipatingInContestAsTeam = async (req, res) => {
     const userId = req.user._id;
     const { contestId } = req.params;
     const { teamId } = req.body;
-    console.log(contestId);
+
     const contest = await Contest.findById(contestId);
-    console.log(userId);
     if (!contest) {
       return res.status(404).json({ msg: "Contest not found" });
     }
+
     const existingTeam = await Team.findById(teamId);
     if (!existingTeam) {
-      return res.status(400).json({
-        msg: "Team not exist",
-      });
+      return res.status(400).json({ msg: "Team not exist" });
     }
+
     const alreadyJoined = await Participate.findOne({
       team: teamId,
       contest: contestId,
     });
 
     if (alreadyJoined) {
-      return res.status(400).json({
-        msg: "Already participated",
-      });
+      return res.status(400).json({ msg: "Already participated" });
     }
 
-    // 🔥 SOLO ONLY
+    /* ================= SOLO ================= */
     if (contest.participationType === "solo") {
-      if (!existingTeam.members || existingTeam.members.length === 0) {
+      if (existingTeam.members?.length === 0) {
         const entry = await Participate.create({
           team: teamId,
           contest: contestId,
         });
+
         return res.status(201).json({
           msg: "Joined as individual",
           data: entry,
         });
       }
+
+      return res.status(400).json({
+        msg: "Solo contest does not allow team members",
+      });
     }
 
-    // 🔥 TEAM →
+    /* ================= TEAM ================= */
     if (contest.participationType === "team") {
-      if (existingTeam.members.length > 0) {
+      if (existingTeam.members?.length > 0) {
         const entry = await Participate.create({
           team: teamId,
           contest: contestId,
         });
+
         return res.status(201).json({
           msg: "Joined as team",
           data: entry,
         });
       }
+
+      return res.status(400).json({
+        msg: "Team must have members",
+      });
     }
+
+    return res.status(400).json({
+      msg: "Invalid participation type",
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({
