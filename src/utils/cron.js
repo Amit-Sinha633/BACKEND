@@ -8,23 +8,27 @@ cron.schedule("* * * * *", async () => {
 
   try {
     // Move Upcoming → Ongoing
-    await Contest.updateMany(
+    const res1 = await Contest.updateMany(
       {
         startingDate: { $lte: now },
         deadline: { $gt: now },
-        type: "Upcoming"
+        type: "Upcoming" // ✅ keeping your field
       },
-      { $set: { status: "Ongoing" } }
+      { $set: { type: "Ongoing" } } // ✅ FIX: use same field
     );
 
+    console.log("Updated to Ongoing:", res1.modifiedCount);
+
     // Move Ongoing → Completed
-    await Contest.updateMany(
+    const res2 = await Contest.updateMany(
       {
         deadline: { $lte: now },
-        type: { $ne: "Completed" }
+        type: { $ne: "Completed" } // ✅ keeping your field
       },
-      { $set: { status: "Completed" } }
+      { $set: { type: "Completed" } } // ✅ FIX
     );
+
+    console.log("Updated to Completed:", res2.modifiedCount);
 
   } catch (error) {
     console.error(error);

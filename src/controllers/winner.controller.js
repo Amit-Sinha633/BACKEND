@@ -5,6 +5,7 @@ import { Winner } from "../models/winner.model.js"
 
 const winnerController = async(req,res) =>{
     const {position,contestName,prizeMoney,quality,creativity,completion,usability} = req.body
+    const {teamId} = req.params
    if(!position || !contestName || !prizeMoney || !quality || !creativity || !completion || !usability){
     return res.status(400).json({
         msg: "All fields are required"

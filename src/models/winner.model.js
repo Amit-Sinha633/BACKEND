@@ -9,6 +9,11 @@ const winnerSchema = new Schema({
         ref: "Contest",
         required:true
     },
+    teamName:{
+         type: Schema.Types.ObjectId,
+        ref: "Team",
+        required:true
+    },
     submit:{
         type:Schema.Types.ObjectId,
         ref:"Submit"

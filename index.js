@@ -1,4 +1,5 @@
 import express from "express";
+import "./src/utils/cron.js"
 import connection from "./src/db/user.db.js";
 import cors from "cors"
 import cookieParser from "cookie-parser";
