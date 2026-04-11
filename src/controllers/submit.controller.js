@@ -90,5 +90,19 @@ console.log(team.createdTeamBy.toString() !== req.user._id.toString())
   }
 };
 
-
-export { submitProject};
+const getAllSubmitProjects = async(req,res) =>{
+  const {contestId} = req.params
+  if(!contestId){
+    return res.status(400).json({
+      msg: "Contest Id is required"
+    })
+  }
+  const submitions = await Submit.find({
+    contest: contestId
+  }).select("teamName liveLink githubLink")
+   const projects = submitions.map(project=>project)
+  return res.status(200).json({
+    mag: projects
+  })
+}
+export { submitProject,getAllSubmitProjects};
