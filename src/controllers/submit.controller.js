@@ -27,9 +27,11 @@ const submitProject = async (req, res) => {
     if (!contest) {
       return res.status(404).json({ msg: "Contest not found" });
     }
-
+console.log(team.createdTeamBy)
+console.log(req.user._id)
+console.log(team.createdTeamBy.toString() !== req.user._id.toString())
     /* ================= USER IN TEAM (FIXED 🔥) ================= */
-    if (!(team.createdBy  === req.user._id)) {
+    if (team.createdTeamBy.toString() !== req.user._id.toString()) {
       return res.status(403).json({
         msg: "You are not authorized to submit for this team",
       });
@@ -46,93 +48,15 @@ const submitProject = async (req, res) => {
         msg: "Team is not participating in this contest",
       });
     }
-    // contest type
-    if(!(contest.type === "Ongoing")){
-      return res.status(400).json({
-        msg: "You are not authorized to submit"
-      })
-    }
-    /* ================= ALREADY SUBMITTED ================= */
-    const alreadySubmitted = await Submit.findOne({
-      teamName: team._id,
-      contest: contestId,
-    });
-
-    if (alreadySubmitted) {
-      return res.status(200).json({
-        msg: "Project already submitted",
-        isSubmitted: true,
-        data: alreadySubmitted,
-      });
-    }
-
-    /* ================= CREATE ================= */
-    const newSubmit = await Submit.create({
-      teamName: team._id,
-      contest: contestId,
-      githubLink,
-      liveLink,
-    });
-
-    return res.status(201).json({
-      msg: "Your project submitted successfully",
-      isSubmitted: true,
-      data: newSubmit,
-    });
-
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({
-      msg: "Something went wrong from server side",
-    });
-  }
-};
-const submitProjectAsSolo = async (req, res) => {
-  try {
-    const {  githubLink, liveLink } = req.body;
-    const { contestId } = req.params;
-    const userId = req.user._id
-    console.log(userId)  
-      /* ================= VALIDATION ================= */
-    if (!contestId || !liveLink) {
-      return res.status(400).json({
-        msg: "All fields are required",
-      });
-    }
-
-    /* ================= TEAM ================= */
-    const user = await User.findById(userId);
-    if (!user) {
-      return res.status(404).json({ msg: "Team not found" });
-    }
-
-    /* ================= CONTEST ================= */
-    const contest = await Contest.findById(contestId);
-    if (!contest) {
-      return res.status(404).json({ msg: "Contest not found" });
-    }
-
     
-    /* ================= PARTICIPATION CHECK ================= */
-    const isParticipating = await Participate.findOne({
-      user: userId,
-      contest: contestId,
-    });
-
-    if (!isParticipating) {
-      return res.status(400).json({
-        msg: "you are not participating in this contest",
-      });
-    }
-    // contest type
     if(!(contest.type === "Ongoing")){
       return res.status(400).json({
-        msg: "You are not authorized to submit"
+        msg: "You are not authorized to submit because it's type is not ongoing contest"
       })
     }
     /* ================= ALREADY SUBMITTED ================= */
     const alreadySubmitted = await Submit.findOne({
-      user: userId,
+      teamName: team._id,
       contest: contestId,
     });
 
@@ -146,7 +70,7 @@ const submitProjectAsSolo = async (req, res) => {
 
     /* ================= CREATE ================= */
     const newSubmit = await Submit.create({
-      user: userId,
+      teamName: team._id,
       contest: contestId,
       githubLink,
       liveLink,
@@ -166,4 +90,5 @@ const submitProjectAsSolo = async (req, res) => {
   }
 };
 
-export { submitProject,submitProjectAsSolo };
+
+export { submitProject};

@@ -17,8 +17,7 @@ const submitSchema = new Schema(
         liveLink:{
             type: String,
             required:true
-        },
-        
+        }
     },
     {
         timestamps: true
