@@ -22,9 +22,6 @@ app.use(cors({
     methods: ["GET", "POST", "PUT", "DELETE","PATCH"]
 }));
 
-app.get('/', (req,res)=>{
-  res.send("Hello everyone!!")
-});
 
 
 app.use("/app/v1/Learn", router);
