@@ -144,5 +144,22 @@ const teamMaking = async (req, res) => {
     });
   }
 };
-
-export { teamMaking };
+const teams = async(req,res) =>{
+  const existingTeams = await Team.find().populate("members").populate("createdTeamBy")
+  return res.status(200).json({
+    msg: "these are the existing teams",
+    data: existingTeams
+  })
+}
+const updateTeam = async(req,res) =>{
+  const {teamId} = req.params
+  const update = await Team.findByIdAndUpdate(teamId,
+    req.body,
+    {new: true}
+  )
+  return res.status(200).json({
+    msg: "team updated Successfully",
+    data: update
+  })
+}
+export { teamMaking,teams,updateTeam };

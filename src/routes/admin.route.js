@@ -7,6 +7,7 @@ import { deleteUser, getAllContest, getAllUsers, updateUser } from "../controlle
 import {winnerController} from "../controllers/winner.controller.js"
 import { getAllParticipantsAsTeam } from "../controllers/perticipate.controller.js";
 import { getAllSubmitProjects } from "../controllers/submit.controller.js";
+import { teams, updateTeam } from "../controllers/team.controller.js";
 
 const contestRouter = Router()
 
@@ -28,6 +29,7 @@ contestRouter.route("/update-contest/:id").patch(
 contestRouter.route("/delete-contest/:id").delete(verifyJwt,deleteContest)
 contestRouter.route("/contest/:contestId").get(verifyJwt,checkRole,getAllParticipantsAsTeam)
 contestRouter.route("/get-all-projects/:contestId").get(verifyJwt,checkRole,getAllSubmitProjects)
-
+contestRouter.route("/get-all-teams").get(verifyJwt,checkRole,teams)
+contestRouter.route("/update-teams").post(verifyJwt,checkRole,updateTeam)
 // contestRouter.route("/winner-contest/:id").post(verifyJwt,checkRole,winnerController)
 export default contestRouter
