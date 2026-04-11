@@ -328,7 +328,7 @@ const contestIds = allPericipates.map(perticipates=>perticipates.contest)
 const contests = await Contest.find({
   _id:contestIds
 })
-const contestNames = contests.map(name=>name.title)
+const contestNames = contests.map(name=>name)
 return res.status(200).json({
   msg: contestNames
 })
