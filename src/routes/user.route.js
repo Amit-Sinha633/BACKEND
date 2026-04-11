@@ -21,7 +21,7 @@ router.route("/perticipate-as-team/:contestId").post(teamParticipatingInContestA
 router.route("/get-all-contest").get(getAllContest)
 router.route("/submit-project-as-team/:contestId").post(verifyJwt,submitProject)
 router.route("/submit-project-as-solo/:contestId").post(verifyJwt,submitProjectAsSolo)
-router.route("/perticipents-in").get(perticipatedIn)
+router.route("/perticipents-in").get(verifyJwt,perticipatedIn)
 
 
 

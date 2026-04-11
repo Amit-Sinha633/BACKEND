@@ -2,6 +2,7 @@ import { Contest } from "../models/contest.model.js";
 import { User } from "../models/user.model.js";
 import nodemailer from "nodemailer";
 import { Participate } from "../models/perticipate.model.js";
+import { Team } from "../models/team.model.js";
 const generateAccessAndRefreshToken = async (userId) => {
   try {
     const user = await User.findById(userId);
@@ -306,6 +307,31 @@ const updateUser = async(req,res) =>{
 } 
 
 const perticipatedIn = async(req,res) =>{
- 
+  const userId = req.user._id
+  if(!userId){
+    return res.status(400).josn({
+      mag: "no user found"
+    })
+  }
+ const perticipatesIn = await Team.find({
+  $or: [
+    { members: { $in: [req.user._id] } },
+    { createdTeamBy: req.user._id }
+  ]
+});
+
+const teamIds = perticipatesIn.map(team => team._id);
+const allPericipates = await Participate.find({
+  team:teamIds
+})
+const contestIds = allPericipates.map(perticipates=>perticipates.contest)
+const contests = await Contest.find({
+  _id:contestIds
+})
+const contestNames = contests.map(name=>name.title)
+return res.status(200).json({
+  msg: contestNames
+})
 }
+
 export { registerUser, logInUser, logOutUser, getProfile, forgetPassword,resetPassword,getAllContest,getAllUsers,deleteUser,updateUser,perticipatedIn};
