@@ -27,8 +27,6 @@ const submitProject = async (req, res) => {
     if (!contest) {
       return res.status(404).json({ msg: "Contest not found" });
     }
-console.log(team.createdTeamBy)
-console.log(req.user._id)
 console.log(team.createdTeamBy.toString() !== req.user._id.toString())
     /* ================= USER IN TEAM (FIXED 🔥) ================= */
     if (team.createdTeamBy.toString() !== req.user._id.toString()) {

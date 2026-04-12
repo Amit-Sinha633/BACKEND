@@ -162,4 +162,12 @@ const updateTeam = async(req,res) =>{
     data: update
   })
 }
-export { teamMaking,teams,updateTeam };
+const deleteTeam = async(req,res) =>{
+  const {teamId} = req.params
+  const teamDelete = await Team.findByIdAndDelete(teamId)
+  return res.status(200).json({
+    msg: "team deleted successfully",
+    data: teamDelete
+  })
+}
+export { teamMaking,teams,updateTeam,deleteTeam };
