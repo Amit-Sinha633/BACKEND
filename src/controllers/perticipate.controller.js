@@ -62,7 +62,13 @@ const getAllParticipantsAsTeam = async (req, res) => {
     const participants = await Participate.find({
       contest: contestId,
     }).select("team")
-     .populate("team", "name createdBy")   // team name
+     .populate({
+        path: "team",
+        populate: {
+          path: "createdTeamBy",
+          select: "userName email"
+        }
+      })   // team name
 
 console.log(participants)
     return res.status(200).json({
