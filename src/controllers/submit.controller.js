@@ -97,7 +97,7 @@ const getAllSubmitProjects = async(req,res) =>{
   }
   const submitions = await Submit.find({
     contest: contestId
-  }).select("teamName liveLink githubLink")
+  }).select("teamName liveLink githubLink").populate("teamName")
    const projects = submitions.map(project=>project)
   return res.status(200).json({
     mag: projects
