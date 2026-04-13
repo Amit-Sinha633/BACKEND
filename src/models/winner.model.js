@@ -2,7 +2,8 @@ import mongoose, { model, Schema } from "mongoose";
 const winnerSchema = new Schema({
     position:{
         type:Number,
-        required:true
+        required:true,
+        unique:true
     },
     contestName:{
         type: Schema.Types.ObjectId,

@@ -44,15 +44,15 @@ const winnerController = async(req,res) =>{
    }
 
 console.log("teamName",TeamId)
-const alreadyWinner = await Winner.findOne({
-  contestName: perticipation.contest._id
-})
+// const alreadyWinner = await Winner.findOne({
+//   contestName: perticipation.contest._id
+// })
 
-if (alreadyWinner) {
-  return res.status(400).json({
-    msg: "Winner already declared for this contest"
-  })
-}
+// if (alreadyWinner) {
+//   return res.status(400).json({
+//     msg: "Winner already declared for this contest"
+//   })
+// }
    const newWinner = await Winner.create({position,contestName:perticipation.contest._id,teamName:TeamId,prizeMoney:existingContest.prizes,quality,creativity,completion,usability})
    return res.status(201).json({
     msg: "Winner created successfully",
