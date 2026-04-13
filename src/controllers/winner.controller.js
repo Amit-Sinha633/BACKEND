@@ -5,10 +5,10 @@ import { Winner } from "../models/winner.model.js"
 import {Team} from "../models/team.model.js"
 import {Participate} from "../models/perticipate.model.js"
 const winnerController = async(req,res) =>{
-    const {position,prizeMoney,quality,creativity,completion,usability} = req.body
+    const {position,quality,creativity,completion,usability} = req.body
     const {teamName} = req.params
 
-   if(!position || !teamName || !prizeMoney || !quality || !creativity || !completion || !usability){
+   if(!position || !teamName || !quality || !creativity || !completion || !usability){
     return res.status(400).json({
         msg: "All fields are required"
     })
@@ -36,13 +36,24 @@ const winnerController = async(req,res) =>{
    const existingContest = await Contest.findOne({
     title: perticipation.contest.title
    })
+   
    if(!(existingContest.type === "Completed")){
     return res.status(400).json({
         msg : "You cannot declare winner because its not completed"
     })
    }
+
 console.log("teamName",teamId)
-   const newWinner = await Winner.create({position,contestName:perticipation.contest._id,teamName:teamId,prizeMoney,quality,creativity,completion,usability})
+const alreadyWinner = await Winner.findOne({
+  contestName: perticipation.contest._id
+})
+
+if (alreadyWinner) {
+  return res.status(400).json({
+    msg: "Winner already declared for this contest"
+  })
+}
+   const newWinner = await Winner.create({position,contestName:perticipation.contest._id,teamName:teamId,prizeMoney:existingContest.prizes,quality,creativity,completion,usability})
    return res.status(201).json({
     msg: "Winner created successfully",
     data:newWinner
