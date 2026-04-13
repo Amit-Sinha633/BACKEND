@@ -32,5 +32,5 @@ contestRouter.route("/get-all-projects/:contestId").get(verifyJwt,checkRole,getA
 contestRouter.route("/get-all-teams").get(verifyJwt,checkRole,teams)
 contestRouter.route("/update-teams/:teamId").post(verifyJwt,checkRole,updateTeam)
 contestRouter.route("/delete-teams/:teamId").post(verifyJwt,checkRole,deleteTeam)
-contestRouter.route("/winner-contest/:teamName").post(verifyJwt,checkRole,winnerController)
+contestRouter.route("/winner-contest/:teamId").post(verifyJwt,checkRole,winnerController)
 export default contestRouter
