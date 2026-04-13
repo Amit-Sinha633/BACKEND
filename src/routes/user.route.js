@@ -6,6 +6,7 @@ import { verifyJwt } from "../middleware/auth.middleware.js";
 import { teamMaking } from "../controllers/team.controller.js";
 import {  teamParticipatingInContestAsTeam } from "../controllers/perticipate.controller.js";
 import { submitProject} from "../controllers/submit.controller.js";
+import { showWiners } from "../controllers/winner.controller.js";
 
 const router = Router();
 
@@ -22,7 +23,7 @@ router.route("/get-all-contest").get(getAllContest)
 router.route("/submit-project-as-team/:contestId").post(verifyJwt,submitProject)
 
 router.route("/perticipents-in").get(verifyJwt,perticipatedIn)
-
+router.route("/winners").get(verifyJwt,showWiners)
 
 
 

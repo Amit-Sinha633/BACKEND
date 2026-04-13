@@ -60,4 +60,11 @@ console.log("teamName",TeamId)
    })
 }
 
-export {winnerController}
+const showWiners = async(req,res) =>{
+    const winners = await Submit.find().populate("teamName contest")
+    return res.status(200).json({
+        msg: "these are the winners",
+        winners
+    })
+}
+export {winnerController,showWiners}
