@@ -6,38 +6,25 @@ import { User } from "../models/user.model.js";
 
 const submitProject = async (req, res) => {
   try {
-    const { teamName, githubLink, liveLink } = req.body;
+    const {githubLink, liveLink } = req.body;
     const { contestId } = req.params;
-
+    const {userId} = req.user._id
     /* ================= VALIDATION ================= */
-    if (!teamName || !contestId || !liveLink) {
+    if ( !contestId || !liveLink) {
       return res.status(400).json({
         msg: "All fields are required",
       });
     }
 
-    /* ================= TEAM ================= */
-    const team = await Team.findOne({name:teamName});
-    if (!team) {
-      return res.status(404).json({ msg: "Team not found" });
-    }
-
-    /* ================= CONTEST ================= */
-    const contest = await Contest.findById(contestId);
-    if (!contest) {
-      return res.status(404).json({ msg: "Contest not found" });
-    }
-console.log(team.createdTeamBy.toString() !== req.user._id.toString())
-    /* ================= USER IN TEAM (FIXED 🔥) ================= */
-    if (team.createdTeamBy.toString() !== req.user._id.toString()) {
-      return res.status(403).json({
-        msg: "You are not authorized to submit for this team",
-      });
-    }
-
+    const userTeam = await Team.find({createdTeamBy:userId})
+    const mappedTeams = userTeam.map(team => {
+  return {
+    teamId: team._id,
+  };
+});
     /* ================= PARTICIPATION CHECK ================= */
     const isParticipating = await Participate.findOne({
-      team: team._id,
+      team: mappedTeams.teamId,
       contest: contestId,
     });
 
@@ -46,15 +33,20 @@ console.log(team.createdTeamBy.toString() !== req.user._id.toString())
         msg: "Team is not participating in this contest",
       });
     }
-    
-    if(!(contest.type === "Ongoing")){
+    const presentContest = await Contest.fondOne({_id:contestId})
+    if(!presentContest){
+      return res.status(400).json({
+        msg: "no contest found"
+      })
+    }
+    if(!(presentContest.type === "Ongoing")){
       return res.status(400).json({
         msg: "You are not authorized to submit because it's type is not ongoing contest"
       })
     }
     /* ================= ALREADY SUBMITTED ================= */
     const alreadySubmitted = await Submit.findOne({
-      teamName: team._id,
+      team: mappedTeams.teamId,
       contest: contestId,
     });
 
@@ -68,7 +60,7 @@ console.log(team.createdTeamBy.toString() !== req.user._id.toString())
 
     /* ================= CREATE ================= */
     const newSubmit = await Submit.create({
-      teamName: team._id,
+      team: mappedTeams.teamId,
       contest: contestId,
       githubLink,
       liveLink,
