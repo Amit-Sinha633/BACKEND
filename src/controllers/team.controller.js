@@ -213,7 +213,11 @@ const rejectInvite = async (req, res) => {
 
     invite.status = "rejected";
     await invite.save();
-
+    const teamId = invite.team.toString()
+    console.log(teamId)
+    const deletedTeam = await Team.findByIdAndDelete(teamId)
+    const deleteParticipate = await Participate.findOneAndDelete({team:teamId})
+    console.log(deleteParticipate)
     return res.json({ msg: "Invite rejected" });
 
   } catch (error) {

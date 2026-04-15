@@ -3,7 +3,7 @@ import { forgetPassword, getAllContest, getProfile, perticipatedIn, registerUser
 import { logInUser } from "../controllers/auth.controller.js";
 import { logOutUser } from "../controllers/auth.controller.js";
 import { verifyJwt } from "../middleware/auth.middleware.js";
-import { getMyInvites, teamMaking } from "../controllers/team.controller.js";
+import { acceptInvite, getMyInvites, rejectInvite, teamMaking } from "../controllers/team.controller.js";
 import {  teamParticipatingInContestAsTeam } from "../controllers/perticipate.controller.js";
 import { submitProject} from "../controllers/submit.controller.js";
 import { showWiners } from "../controllers/winner.controller.js";
@@ -25,6 +25,8 @@ router.route("/submit-project-as-team/:contestId").post(verifyJwt,submitProject)
 router.route("/perticipents-in").get(verifyJwt,perticipatedIn)
 router.route("/winners").get(verifyJwt,showWiners)
 router.route("/get-invitation").get(verifyJwt,getMyInvites)
+router.route("/accept-invitation/:inviteId").post(verifyJwt,acceptInvite)
+router.route("/reject-invitation/:inviteId").post(verifyJwt,rejectInvite)
 
 
 export default router; 
