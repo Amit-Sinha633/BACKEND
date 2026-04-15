@@ -17,16 +17,12 @@ const submitProject = async (req, res) => {
     }
 
     const userTeam = await Team.find({createdTeamBy:userId})
-    const mappedTeams = userTeam.map(team => {
-  return {
-    teamId: team._id,
-  };
+    const teamIds = userTeam.map(team => team._id);
+
+const isParticipating = await Participate.findOne({
+  team: { $in: teamIds },
+  contest: contestId,
 });
-    /* ================= PARTICIPATION CHECK ================= */
-    const isParticipating = await Participate.findOne({
-      team: mappedTeams.teamId,
-      contest: contestId,
-    });
 
     if (!isParticipating) {
       return res.status(400).json({
