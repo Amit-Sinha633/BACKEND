@@ -19,7 +19,7 @@ const submitProject = async (req, res) => {
     const userTeam = await Team.find({createdTeamBy:userId})
     const teamIds = userTeam.map(team => team._id);
 
-const isParticipating = await Participate.findOne({
+const isParticipating = await Participate.find({
   team: { $in: teamIds },
   contest: contestId,
 });
