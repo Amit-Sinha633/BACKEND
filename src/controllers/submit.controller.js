@@ -60,11 +60,11 @@ const isParticipating = await Participate.find({
       contest: contestId,
       githubLink,
       liveLink,
+      isSubmited:true
     });
 
     return res.status(201).json({
       msg: "Your project submitted successfully",
-      isSubmitted: true,
       data: newSubmit,
     });
 

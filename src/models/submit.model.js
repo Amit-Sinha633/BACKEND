@@ -17,6 +17,10 @@ const submitSchema = new Schema(
         liveLink:{
             type: String,
             required:true
+        },
+        isSubmited:{
+            type:Boolean,
+            default: false
         }
     },
     {
