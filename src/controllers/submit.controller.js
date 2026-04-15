@@ -8,7 +8,7 @@ const submitProject = async (req, res) => {
   try {
     const {githubLink, liveLink } = req.body;
     const { contestId } = req.params;
-    const {userId} = req.user._id
+    const userId = req.user._id
     /* ================= VALIDATION ================= */
     if ( !contestId || !liveLink) {
       return res.status(400).json({
@@ -29,7 +29,7 @@ const isParticipating = await Participate.find({
         msg: "Team is not participating in this contest",
       });
     }
-    const presentContest = await Contest.fondOne({_id:contestId})
+    const presentContest = await Contest.findOne({_id:contestId})
     if(!presentContest){
       return res.status(400).json({
         msg: "no contest found"
@@ -42,7 +42,7 @@ const isParticipating = await Participate.find({
     }
     /* ================= ALREADY SUBMITTED ================= */
     const alreadySubmitted = await Submit.findOne({
-      team: mappedTeams.teamId,
+      team: isParticipating.team,
       contest: contestId,
     });
 
@@ -56,7 +56,7 @@ const isParticipating = await Participate.find({
 
     /* ================= CREATE ================= */
     const newSubmit = await Submit.create({
-      team: mappedTeams.teamId,
+      team: isParticipating.team,
       contest: contestId,
       githubLink,
       liveLink,
