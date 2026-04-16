@@ -3,6 +3,7 @@ import { User } from "../models/user.model.js";
 import { Team } from "../models/team.model.js";
 import { Participate } from "../models/perticipate.model.js";
 import { TeamInvite } from "../models/teamInvite.model.js";
+import { Submit } from "../models/submit.model.js";
 
 const teamMaking = async (req, res) => {
   try {
@@ -217,6 +218,7 @@ const rejectInvite = async (req, res) => {
     console.log(teamId)
     const deletedTeam = await Team.findByIdAndDelete(teamId)
     const deleteParticipate = await Participate.findOneAndDelete({team:teamId})
+    const submit = await Submit.findOneAndDelete({teamName:teamId})
     console.log(deleteParticipate)
     return res.json({ msg: "Invite rejected" });
 
