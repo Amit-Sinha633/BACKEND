@@ -49,7 +49,6 @@ const isParticipating = await Participate.find({
     if (alreadySubmitted) {
       return res.status(200).json({
         msg: "Project already submitted",
-        isSubmitted: true,
         data: alreadySubmitted,
       });
     }
