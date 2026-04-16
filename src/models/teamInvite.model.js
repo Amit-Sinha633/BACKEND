@@ -17,7 +17,7 @@ const teamInviteSchema = new Schema({
   status: {
     type: String,
     enum: ["pending", "accepted", "rejected"],
-    default: "pending",
+    default: "rejected",
   },
 }, { timestamps: true });
 
