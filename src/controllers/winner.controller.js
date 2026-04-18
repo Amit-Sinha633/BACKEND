@@ -37,11 +37,11 @@ const winnerController = async(req,res) =>{
     title: perticipation.contest.title
    })
    
-//    if(!(existingContest.type === "Completed")){
-//     return res.status(400).json({
-//         msg : "You cannot declare winner because its not completed"
-//     })
-//    }
+   if(!(existingContest.type === "Completed")){
+    return res.status(400).json({
+        msg : "You cannot declare winner because its not completed"
+    })
+   }
 
 console.log("teamName",TeamId)
 // const alreadyWinner = await Winner.findOne({
@@ -61,7 +61,7 @@ console.log("teamName",TeamId)
 }
 
 const showWiners = async(req,res) =>{
-    const winners = await Submit.find().populate("teamName contest")
+    const winners = await Winner.find().populate("teamName contestName")
     return res.status(200).json({
         msg: "these are the winners",
         winners
