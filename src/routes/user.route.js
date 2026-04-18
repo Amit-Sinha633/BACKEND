@@ -23,7 +23,7 @@ router.route("/get-all-contest").get(getAllContest)
 router.route("/submit-project-as-team/:contestId").post(verifyJwt,submitProject)
 
 router.route("/perticipents-in").get(verifyJwt,perticipatedIn)
-router.route("/winners").get(verifyJwt,showWiners)
+router.route("/winners").get(showWiners)
 router.route("/get-invitation").get(verifyJwt,getMyInvites)
 router.route("/accept-invitation/:inviteId").post(verifyJwt,acceptInvite)
 router.route("/reject-invitation/:inviteId").post(verifyJwt,rejectInvite)
