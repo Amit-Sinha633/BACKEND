@@ -26,7 +26,12 @@ const registerUser = async (req, res) => {
         msg: "All fields are required",
       });
     } 
-    const existingUser = await User.findOne({ email });
+    const existingUser = await User.findOne({
+      $or:[
+        { email },
+        {phoneNumber}
+      ]
+    });
     if (existingUser) {
       return res.status(400).json({
         msg: "User already exist please logIn",
@@ -38,16 +43,18 @@ const registerUser = async (req, res) => {
       password,
       phoneNumber,
     });
-    return res.status(200).json({
+    return res.status(201).json({
       msg: "User registered succesfully",
       data: newUser
     });
   } catch (error) {
-    return res.status(500).json({
-      msg: "Something went wrong while registaring the user",
-      error
-    });
-  }
+  console.error(error);
+
+  return res.status(500).json({
+    msg: "Something went wrong while registering the user",
+    error: error.message
+  });
+}
 };
 
 const logInUser = async (req, res) => {
