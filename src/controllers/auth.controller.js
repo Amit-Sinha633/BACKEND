@@ -287,11 +287,19 @@ const deleteUser = async(req,res) =>{
 const updateUser = async(req,res) =>{
   try {
     const {id} = req.params
+    const user = await User.findById(id)
+    if(!user){
+      return res.status(404).josn("No user found")
+    }
+    if(user.role === "admin"){
+      return res.status(400).json("You can not update a admin")
+    }
     const updatedThings ={
       userName : req.body.userName,
       phoneNumber: req.body.phoneNumber,
       role: req.body.role
     }
+    
     const newUser = await User.findByIdAndUpdate(
       id,
       updatedThings,
