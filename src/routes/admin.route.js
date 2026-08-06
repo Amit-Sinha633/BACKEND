@@ -14,7 +14,7 @@ const contestRouter = Router()
 contestRouter.route("/create-contest").post(
   verifyJwt,
   checkRole,
-  upload.array("image",4),
+  upload.single("image"),
   createContest
 );
 contestRouter.route("/get-all-contest").get(verifyJwt,getAllContest)
